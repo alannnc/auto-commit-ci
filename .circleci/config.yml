@@ -29,15 +29,20 @@ jobs:
 
             # Check if README.md exists
             if [ -f "README.md" ]; then
-              # Add a dot to the last line of README.md
-              sed -i '$ s/$/./' README.md
-              
-              # Commit and push the changes
-              git config user.email "alannnc@gmail.com"
-              git config user.name "CircleCI Job"
-              git add README.md
-              git commit -m "Add a dot to the last line of README.md [skip ci]"
-              git push origin "${CIRCLE_BRANCH}"
+              # Add a dot to the last line of README.md if not already present
+              if ! tail -n 1 README.md | grep -q '\.$'; then
+                echo "Adding a dot to the last line of README.md"
+                sed -i '$ s/$/./' README.md
+                
+                # Commit and push the changes
+                git config user.email "alannnc@gmail.com"
+                git config user.name "CircleCI Job"
+                git add README.md
+                git commit -m "Add a dot to the last line of README.md [skip ci]"
+                git push origin "${CIRCLE_BRANCH}"
+              else
+                echo "No changes needed; the last line of README.md already ends with a dot."
+              fi
             else
               echo "README.md not found. Skipping update."
             fi
