@@ -25,19 +25,19 @@ jobs:
       #     name: "Say hello"
       #     command: "echo Hello, World!"
       - run:
-        name: Commit to GitHub
-        command: |
-          if [[ "${CIRCLE_USERNAME}" = "alannnc" && -z "${CIRCLE_PULL_REQUEST}"]]
-          then
-            echo "Committing to GitHub"
-            git config user.email "alannnc@gmail.com"
-            git config user.name "CircleCI Job"
-            git checkout main
-            git commit --allow-empty -am "Automatic commit from CircleCI [skip ci]"
-            git push origin main
-          else
-            echo "Not committing to GitHub"
-          fi
+          name: Commit to GitHub
+          command: |
+            if [[ "${CIRCLE_USERNAME}" = "alannnc" && -z "${CIRCLE_PULL_REQUEST}"]]
+            then
+              echo "Committing to GitHub"
+              git config user.email "alannnc@gmail.com"
+              git config user.name "CircleCI Job"
+              git checkout main
+              git commit --allow-empty -am "Automatic commit from CircleCI [skip ci]"
+              git push origin main
+            else
+              echo "Not committing to GitHub"
+            fi
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
