@@ -43,10 +43,10 @@ jobs:
               # Commit and push the changes
               git config user.email "alannnc@gmail.com"
               git config user.name "CircleCI Job"
-              git add README.md
-              git commit -m "Append a dot and a new line to README.md [skip ci]"
+              git add .
+              git commit -m "Updating snapshots [skip ci]"
               git push origin "${CIRCLE_BRANCH}"
-              
+
             else
               echo "No changes detected in any base.ts file inside integrations/wallets/. Skipping snapshot creation."
             fi
