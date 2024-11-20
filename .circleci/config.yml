@@ -29,10 +29,20 @@ jobs:
 
             # Check if README.md exists
             if [ -f "README.md" ]; then
+              # Save the original file for comparison
+              cp README.md README.md.bak
+              
               # Add a dot to the last line of README.md if not already present
               if ! tail -n 1 README.md | grep -q '\.$'; then
                 echo "Adding a dot to the last line of README.md"
                 sed -i '$ s/$/./' README.md
+              else
+                echo "The last line of README.md already ends with a dot. No changes needed."
+              fi
+              
+              # Check if the file was actually modified
+              if ! cmp -s README.md README.md.bak; then
+                echo "Changes detected in README.md. Committing and pushing the changes."
                 
                 # Commit and push the changes
                 git config user.email "alannnc@gmail.com"
@@ -41,8 +51,11 @@ jobs:
                 git commit -m "Add a dot to the last line of README.md [skip ci]"
                 git push origin "${CIRCLE_BRANCH}"
               else
-                echo "No changes needed; the last line of README.md already ends with a dot."
+                echo "No changes were made to README.md. Skipping commit and push."
               fi
+              
+              # Clean up the backup file
+              rm README.md.bak
             else
               echo "README.md not found. Skipping update."
             fi
