@@ -22,17 +22,24 @@ jobs:
           fingerprints:
             - "SHA256:kH2pPODfJX9pp3OGFT/tcw58s7jSxwGzmzl7CRyNBHk"
       - run:
-          name: Commit to GitHub
+          name: Update README.md and Push to PR Branch
           command: |
-            if [[ "${CIRCLE_USERNAME}" = "alannnc" && -z "${CIRCLE_PULL_REQUEST}" ]]; then
-              echo "Committing to GitHub"
+            # Ensure we are on the current PR branch
+            git checkout "${CIRCLE_BRANCH}"
+
+            # Check if README.md exists
+            if [ -f "README.md" ]; then
+              # Add a dot to the last line of README.md
+              sed -i '$ s/$/./' README.md
+              
+              # Commit and push the changes
               git config user.email "alannnc@gmail.com"
               git config user.name "CircleCI Job"
-              git checkout main
-              git commit --allow-empty -am "Automatic commit from CircleCI [skip ci]"
-              git push origin main
+              git add README.md
+              git commit -m "Add a dot to the last line of README.md [skip ci]"
+              git push origin "${CIRCLE_BRANCH}"
             else
-              echo "Not committing to GitHub"
+              echo "README.md not found. Skipping update."
             fi
 
 # Orchestrate jobs using workflows
